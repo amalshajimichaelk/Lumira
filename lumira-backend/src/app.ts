@@ -82,6 +82,27 @@ export function createApp(): Application {
   );
 
   // ─────────────────────────────────────────
+  // Health Check Endpoint (MUST be before Rate Limiting)
+  // ─────────────────────────────────────────
+  app.get('/api/health', async (req: express.Request, res: express.Response) => {
+    try {
+      await prisma.$queryRaw`SELECT 1`;
+      res.status(200).json({
+        status: 'ok',
+        timestamp: new Date().toISOString(),
+        db: 'connected',
+        environment: env.NODE_ENV,
+      });
+    } catch {
+      res.status(503).json({
+        status: 'error',
+        timestamp: new Date().toISOString(),
+        db: 'disconnected',
+      });
+    }
+  });
+
+  // ─────────────────────────────────────────
   // Global Rate Limiting: 100 req / 15 min per IP
   // ─────────────────────────────────────────
   app.use(
@@ -109,27 +130,6 @@ export function createApp(): Application {
   app.use('/api/departments', departmentsRoutes);
   app.use('/api/revenue', revenueRoutes);
   app.use('/api/appointments', appointmentsRoutes);
-
-  // ─────────────────────────────────────────
-  // Health Check Endpoint
-  // ─────────────────────────────────────────
-  app.get('/api/health', async (req: express.Request, res: express.Response) => {
-    try {
-      await prisma.$queryRaw`SELECT 1`;
-      res.status(200).json({
-        status: 'ok',
-        timestamp: new Date().toISOString(),
-        db: 'connected',
-        environment: env.NODE_ENV,
-      });
-    } catch {
-      res.status(503).json({
-        status: 'error',
-        timestamp: new Date().toISOString(),
-        db: 'disconnected',
-      });
-    }
-  });
 
   // ─────────────────────────────────────────
   // Error Handling (must be last)
