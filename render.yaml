@@ -33,7 +33,6 @@ services:
   - type: web
     name: lumira-frontend
     env: static
-    plan: free
     buildCommand: npm install && npm run build
     staticPublishPath: ./dist
     envVars:
