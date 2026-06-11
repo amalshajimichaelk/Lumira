@@ -139,6 +139,16 @@ async function main() {
   console.log('🌱 Starting Lumira seed...');
 
   // ─────────────────────────────────────────────────────
+  // CHECK EXISTING DATA
+  // ─────────────────────────────────────────────────────
+  console.log('🔍 Checking existing data...');
+  const existingAdmin = await prisma.user.findFirst({ where: { email: 'admin@lumira.com' } });
+  if (existingAdmin) {
+    console.log('✅ Database already seeded. Skipping.');
+    return;
+  }
+
+  // ─────────────────────────────────────────────────────
   // CLEAN EXISTING DATA (in correct order)
   // ─────────────────────────────────────────────────────
   console.log('🗑️  Cleaning existing data...');
