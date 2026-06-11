@@ -4,14 +4,13 @@ services:
     runtime: node
     plan: free
     region: oregon
+    rootDir: lumira-backend
     buildCommand: npm install && npm run build && npm run db:migrate
     startCommand: npm run start
     healthCheckPath: /api/health
     envVars:
       - key: NODE_ENV
         value: production
-      - key: PORT
-        value: 10000
       - key: DATABASE_URL
         fromDatabase:
           name: lumira-db
@@ -30,6 +29,17 @@ services:
         value: true
       - key: COOKIE_DOMAIN
         value: .onrender.com
+
+  - type: web
+    name: lumira-frontend
+    env: static
+    plan: free
+    region: oregon
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    envVars:
+      - key: VITE_API_BASE_URL
+        value: https://lumira-backend.onrender.com/api
 
 databases:
   - name: lumira-db
