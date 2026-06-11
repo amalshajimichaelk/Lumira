@@ -16,7 +16,7 @@
 
 Welcome to **Lumira**, a full-stack healthcare analytics application designed to handle hospital administration, patient tracking, and revenue management. Built with a modern React frontend and a robust Node.js/Express backend, Lumira leverages PostgreSQL for scalable data storage and Prisma ORM for type-safe database interactions.
 
-🌐 Live Website : [Link to be added]
+🌐 Live Website : https://lumira-frontend.onrender.com
 
 ---
 
