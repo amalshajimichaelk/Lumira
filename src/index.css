@@ -1,0 +1,140 @@
+@import "tailwindcss";
+
+@theme {
+  --color-surface: #0a0f1e;
+  --color-surface-dim: #050810;
+  --color-surface-bright: #1e293b;
+  --color-surface-container-lowest: #0a0f1e;
+  --color-surface-container-low: #08101e;
+  --color-surface-container: #0d1b2a;
+  --color-surface-container-high: #16263a;
+  --color-surface-container-highest: #1e334a;
+  
+  --color-on-surface: #f8fafc;
+  --color-on-surface-variant: #94a3b8;
+  --color-outline: #334155;
+  --color-surface-tint: #00d4aa;
+  
+  --color-background: #0a0f1e;
+  --color-on-background: #e2e8f0;
+  
+  --color-primary: #00d4aa;
+  --color-on-primary: #ffffff;
+  --color-primary-container: rgba(0, 212, 170, 0.1);
+  --color-primary-fixed: #00d4aa;
+  --color-primary-fixed-dim: #00a383;
+
+  --color-secondary: #7c3aed;
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: rgba(124, 58, 237, 0.1);
+  --color-secondary-fixed: #7c3aed;
+
+  --color-tertiary: #38bdf8;
+  --color-on-tertiary: #ffffff;
+  --color-tertiary-container: rgba(56, 189, 248, 0.1);
+  --color-tertiary-fixed: #38bdf8;
+
+  --color-error: #ff6b6b;
+  --color-on-error: #ffffff;
+  --color-error-container: rgba(255, 107, 107, 0.1);
+
+  --font-sans: "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+}
+
+@layer utilities {
+  .glass-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1.5rem;
+    transition: all 0.2s ease-in-out;
+  }
+  .glass-card-light {
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    border-radius: 1.5rem;
+  }
+  .glow-teal:hover {
+    border-color: rgba(0, 212, 170, 0.3);
+  }
+  .glow-violet:hover {
+    border-color: rgba(124, 58, 237, 0.3);
+  }
+  .glow-coral:hover {
+    border-color: rgba(255, 107, 107, 0.3);
+  }
+  
+  /* Custom Scrollbar */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-on-background);
+  font-family: var(--font-sans);
+}
+
+body.light-mode {
+  --color-background: #f8fafc;
+  --color-on-background: #0f172a;
+}
+
+body.light-mode .text-white {
+  color: #0f172a !important;
+}
+
+body.light-mode .text-slate-400,
+body.light-mode .text-slate-300 {
+  color: #475569 !important;
+}
+
+body.light-mode .bg-white\/5 {
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1) !important;
+}
+
+body.light-mode .border-white\/10 {
+  border-color: #cbd5e1 !important;
+}
+
+body.light-mode .bg-\[\#0a0f1e\] {
+  background-color: #f8fafc !important;
+}
+
+body.light-mode .bg-\[\#0d1b2a\] {
+  background-color: #ffffff !important;
+}
+
+body.light-mode .bg-\[\#0a0f1e\]\/80 {
+  background-color: rgba(248, 250, 252, 0.8) !important;
+}
+
+body.light-mode table thead {
+  background-color: #f1f5f9 !important;
+}
+
+body.light-mode tr.hover\:bg-white\/5:hover {
+  background-color: #f1f5f9 !important;
+}
+
+body.light-mode .text-slate-500 {
+  color: #64748b !important;
+}

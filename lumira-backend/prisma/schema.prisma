@@ -1,0 +1,191 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// ─────────────────────────────────────────
+// ENUMS
+// ─────────────────────────────────────────
+
+enum Role {
+  ADMIN
+  DOCTOR
+  VIEWER
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum AppointmentStatus {
+  BOOKED
+  COMPLETED
+  CANCELLED
+  NO_SHOW
+}
+
+enum PaymentType {
+  CASH
+  UPI
+  CARD
+  INSURANCE
+}
+
+enum PaymentStatus {
+  PAID
+  PENDING
+  OVERDUE
+}
+
+// ─────────────────────────────────────────
+// MODELS
+// ─────────────────────────────────────────
+
+model User {
+  id            String         @id @default(cuid())
+  email         String         @unique
+  passwordHash  String
+  name          String
+  role          Role           @default(VIEWER)
+  doctorId      String?        @unique
+  doctor        Doctor?        @relation(fields: [doctorId], references: [id])
+  refreshTokens RefreshToken[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  @@index([email])
+}
+
+model RefreshToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model Department {
+  id           String          @id @default(cuid())
+  name         String          @unique
+  description  String?
+  capacity     Int             @default(50)
+  baseRate     Decimal         @default(1000) @db.Decimal(10, 2)
+  doctors      Doctor[]
+  appointments Appointment[]
+  visits       Visit[]
+  revenues     RevenueRecord[]
+  createdAt    DateTime        @default(now())
+}
+
+model Doctor {
+  id             String        @id @default(cuid())
+  name           String
+  specialization String
+  departmentId   String
+  department     Department    @relation(fields: [departmentId], references: [id])
+  user           User?
+  appointments   Appointment[]
+  visits         Visit[]
+  createdAt      DateTime      @default(now())
+
+  @@index([departmentId])
+}
+
+model Patient {
+  id          String          @id @default(cuid())
+  patientCode String          @unique
+  name        String
+  dateOfBirth DateTime
+  gender      Gender
+  phone       String
+  email       String?
+  address     String?
+  visits      Visit[]
+  appointments Appointment[]
+  revenues    RevenueRecord[]
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  @@index([patientCode])
+  @@index([name])
+}
+
+model Appointment {
+  id           String            @id @default(cuid())
+  patientId    String
+  patient      Patient           @relation(fields: [patientId], references: [id])
+  doctorId     String
+  doctor       Doctor            @relation(fields: [doctorId], references: [id])
+  departmentId String
+  department   Department        @relation(fields: [departmentId], references: [id])
+  scheduledAt  DateTime
+  durationMins Int               @default(30)
+  status       AppointmentStatus @default(BOOKED)
+  notes        String?
+  visit        Visit?
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+
+  @@index([scheduledAt])
+  @@index([patientId])
+  @@index([doctorId])
+  @@index([departmentId])
+  @@index([status])
+}
+
+model Visit {
+  id            String        @id @default(cuid())
+  appointmentId String        @unique
+  appointment   Appointment   @relation(fields: [appointmentId], references: [id])
+  patientId     String
+  patient       Patient       @relation(fields: [patientId], references: [id])
+  doctorId      String
+  doctor        Doctor        @relation(fields: [doctorId], references: [id])
+  departmentId  String
+  department    Department    @relation(fields: [departmentId], references: [id])
+  visitDate     DateTime
+  waitTimeMin   Int
+  durationMin   Int
+  outcome       String?
+  notes         String?
+  revenue       RevenueRecord?
+  createdAt     DateTime      @default(now())
+
+  @@index([visitDate])
+  @@index([departmentId])
+  @@index([patientId])
+  @@index([doctorId])
+}
+
+model RevenueRecord {
+  id            String        @id @default(cuid())
+  visitId       String        @unique
+  visit         Visit         @relation(fields: [visitId], references: [id])
+  patientId     String
+  patient       Patient       @relation(fields: [patientId], references: [id])
+  departmentId  String
+  department    Department    @relation(fields: [departmentId], references: [id])
+  amount        Decimal       @db.Decimal(10, 2)
+  paymentType   PaymentType
+  paymentStatus PaymentStatus @default(PENDING)
+  paidAt        DateTime?
+  createdAt     DateTime      @default(now())
+
+  @@index([createdAt])
+  @@index([departmentId])
+  @@index([paymentStatus])
+  @@index([patientId])
+}

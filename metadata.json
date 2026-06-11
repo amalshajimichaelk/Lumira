@@ -1,0 +1,8 @@
+{
+  "name": "MediMetrics",
+  "description": "Healthcare Analytics Dashboard with real-time tracking, metrics, and scheduling capabilities.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
