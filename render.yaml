@@ -34,7 +34,6 @@ services:
     name: lumira-frontend
     env: static
     plan: free
-    region: oregon
     buildCommand: npm install && npm run build
     staticPublishPath: ./dist
     envVars:
