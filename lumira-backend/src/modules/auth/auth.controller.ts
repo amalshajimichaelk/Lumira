@@ -14,8 +14,7 @@ const REFRESH_COOKIE = 'refreshToken';
 const cookieOptions = {
   httpOnly: true,
   secure: env.COOKIE_SECURE,
-  sameSite: 'strict' as const,
-  domain: env.COOKIE_DOMAIN,
+  sameSite: env.NODE_ENV === 'production' ? ('none' as const) : ('lax' as const),
   maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days in ms
 };
 

@@ -27,8 +27,6 @@ services:
         value: https://lumira-frontend.onrender.com
       - key: COOKIE_SECURE
         value: true
-      - key: COOKIE_DOMAIN
-        value: .onrender.com
 
   - type: web
     name: lumira-frontend
